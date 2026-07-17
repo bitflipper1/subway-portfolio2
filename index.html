@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DesignMatt-ers | NYC Subway Edition — Matt McGlothlin, UX Design Leader</title>
+  <meta name="description" content="The UX portfolio of Matt McGlothlin, reimagined as a NYC subway map. Each line is a company, each station a project: Honeywell, EDA/Top Bid, Ecomdash, and founder ventures." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23EE352E'/%3E%3Ctext x='50' y='68' font-size='55' font-weight='bold' font-family='Helvetica,Arial' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div>
+        <div class="wordmark">Design<span class="thin">Matt</span>-ers</div>
+        <div class="wordmark-sub">
+          <span>NYC Subway Edition</span>
+          <span class="dot">&bull;</span>
+          <span>Portfolio Authority</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="service-status">
+          <span class="label">System Status</span>
+          <span class="pill">Good Service</span>
+        </div>
+        <a class="btn-contact" href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-lines" aria-hidden="true">
+      <span style="background:#EE352E"></span>
+      <span style="background:#0039A6"></span>
+      <span style="background:#00933C"></span>
+      <span style="background:#FCCC0A"></span>
+    </div>
+    <div class="hero-content">
+      <div class="hero-kicker">Express Service To</div>
+      <h1>Next Stop:<br /><span class="gradient">Great UX</span></h1>
+      <p>Navigating the complex underground of product design, strategy, and user research — from Fortune 100 platforms to founder-built startups.</p>
+      <div class="scroll-cue" aria-hidden="true">▼</div>
+    </div>
+  </section>
+
+  <section class="map-section" id="map">
+    <div class="container">
+      <div class="section-heading">
+        <h2>System Map</h2>
+        <span class="sub">Lines are companies &bull; Stations are projects</span>
+      </div>
+      <p class="map-hint">Tap any station to ride to that project.</p>
+      <div class="map-scroll">
+        <svg id="system-map" role="img" aria-label="Subway-style map of Matt McGlothlin's portfolio. Four lines — Honeywell, EDA/Top Bid, Ecomdash, and the Founder Shuttle — depart the About Me interchange, stop at project stations, run via Digital Leadership, and terminate at Contact."></svg>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
+
+  <div class="feed" id="feed">
+    <svg class="trunk-svg" id="trunk-svg" aria-hidden="true"></svg>
+    <div class="feed-inner" id="feed-inner"><!-- project stops render here --></div>
+  </div>
+
+  <section class="info-section" id="about">
+    <div class="container">
+      <div class="section-heading">
+        <h2>About Me</h2>
+        <span class="sub">Interchange station &bull; All lines board here</span>
+      </div>
+      <div class="info-grid two-col">
+        <div>
+          <p class="lede" id="about-tagline"></p>
+          <div id="about-body"></div>
+          <div class="line-swatches" aria-hidden="true">
+            <span style="background:#EE352E"></span>
+            <span style="background:#0039A6"></span>
+            <span style="background:#00933C"></span>
+            <span style="background:#FCCC0A"></span>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-weight:900; text-transform:uppercase; margin-bottom:18px;">Founder Shuttle stops</h3>
+          <ul class="service-lines" id="founder-stations" style="color:inherit;"></ul>
+          <p style="margin-top:22px;"><a class="text-link" href="https://designmatt-ers.com/about-1" target="_blank" rel="noopener">Full story on designmatt-ers.com ↗</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="info-section alt" id="process">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Digital Leadership</h2>
+        <span class="sub">All lines run via this station</span>
+      </div>
+      <p class="body-text" style="color:#444; max-width:640px;">How every line on this map gets built: research the route, validate with the riders, document the signals, and lead the crew.</p>
+      <div class="process-list" id="process-list"></div>
+      <p style="margin-top:24px;"><a class="text-link" href="https://designmatt-ers.com/digital-leadership-design-process" target="_blank" rel="noopener">The full design process ↗</a></p>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>Last Stop</h3>
+          <p class="muted">This is the end of the line — but every good transit system runs both ways. Whether it's a Fortune 100 platform or a scrappy startup, I design systems that get people where they're going without confusion.</p>
+          <a class="metrocard" id="contact-card" href="#">
+            <div class="email" id="contact-email"></div>
+            <div class="divider"></div>
+            <div class="swipe"><span>Swipe card to email</span><span>→</span></div>
+          </a>
+          <div class="footer-links">
+            <a href="https://designmatt-ers.com" target="_blank" rel="noopener">designmatt-ers.com (classic edition)</a>
+            <a href="https://www.linkedin.com/in/bitflip" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div>
+          <h3>Service Lines</h3>
+          <ul class="service-lines" id="footer-lines"></ul>
+        </div>
+        <div>
+          <h3>Rider Alerts</h3>
+          <p class="muted">Planned service change: this portfolio is under active construction. Expect new stations to open without notice. No weekend outages anticipated.</p>
+          <p class="muted">“Great design is invisible — like a train that's always on time.”</p>
+        </div>
+      </div>
+      <div class="colophon">
+        &copy; <span id="year"></span> DesignMatt-ers MTA (Matt Transit Authority) &bull; Charlotte, NC &bull; NYC at heart
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
