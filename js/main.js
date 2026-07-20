@@ -90,47 +90,57 @@
     return minor ? minor.station : id;
   }
 
+  // Live references into the map SVG so the living-map choreography can
+  // draw lines, pop stations, and run trains after the fact.
+  const MAPREFS = {
+    svg: null,
+    paths: {},
+    casings: {},
+    stations: {},
+    bullets: {},
+    specials: [],
+    shared: null,
+  };
+
   function buildSystemMap() {
     const svg = document.getElementById("system-map");
     svg.setAttribute("viewBox", "0 0 " + MAP.w + " " + MAP.h);
+    MAPREFS.svg = svg;
 
     // Shared trackage: Digital Leadership -> Contact
-    svg.appendChild(
-      svgEl("path", {
-        d: "M " + MAP.process.x + " " + MAP.process.y + " L " + MAP.contact.x + " " + MAP.contact.y,
-        stroke: "#111111",
-        "stroke-width": 10,
-        fill: "none",
-        "stroke-linecap": "round",
-      })
-    );
+    MAPREFS.shared = svgEl("path", {
+      d: "M " + MAP.process.x + " " + MAP.process.y + " L " + MAP.contact.x + " " + MAP.contact.y,
+      stroke: "#111111",
+      "stroke-width": 10,
+      fill: "none",
+      "stroke-linecap": "round",
+    });
+    svg.appendChild(MAPREFS.shared);
 
     // Colored routes. Lines whose color can't reach 3:1 against the white map
     // (the yellow shuttle) get a dark casing stroke underneath — the classic
     // transit-map treatment — so the route stays visible to low-vision riders.
     Object.values(LINES).forEach((line) => {
       if (line.casing) {
-        svg.appendChild(
-          svgEl("path", {
-            d: routePath(line),
-            stroke: line.casing,
-            "stroke-width": 14,
-            fill: "none",
-            "stroke-linecap": "round",
-            "stroke-linejoin": "round",
-          })
-        );
-      }
-      svg.appendChild(
-        svgEl("path", {
+        MAPREFS.casings[line.id] = svgEl("path", {
           d: routePath(line),
-          stroke: line.color,
-          "stroke-width": 10,
+          stroke: line.casing,
+          "stroke-width": 14,
           fill: "none",
           "stroke-linecap": "round",
           "stroke-linejoin": "round",
-        })
-      );
+        });
+        svg.appendChild(MAPREFS.casings[line.id]);
+      }
+      MAPREFS.paths[line.id] = svgEl("path", {
+        d: routePath(line),
+        stroke: line.color,
+        "stroke-width": 10,
+        fill: "none",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+      });
+      svg.appendChild(MAPREFS.paths[line.id]);
     });
 
     // Route bullets at the start of each horizontal run.
@@ -162,6 +172,7 @@
           text: line.bullet,
         })
       );
+      MAPREFS.bullets[line.id] = g;
       svg.appendChild(g);
     });
 
@@ -212,6 +223,7 @@
           scrollToTarget(target);
         }
       });
+      (MAPREFS.stations[st.route] = MAPREFS.stations[st.route] || []).push(g);
       svg.appendChild(g);
     });
 
@@ -253,8 +265,216 @@
           scrollToTarget(s.target);
         }
       });
+      MAPREFS.specials.push(g);
       svg.appendChild(g);
     });
+  }
+
+  /* ---------- The living map ----------
+     Inspired by data-driven transit art: each line draws itself with a
+     personality derived from that chapter of the career, then trains run
+     the routes continuously, blooming when they call at interchanges. */
+
+  // delay/duration/easing = how each chapter "moves"; trains-per-line and
+  // speed = how that era ran. Founder shuttle gets three trains — one per
+  // startup. All values are choreography data, not decoration.
+  const PERSONALITY = {
+    honeywell: { delay: 0, duration: 2600, easing: "cubic-bezier(0.35,0,0.15,1)", trains: 2, speed: 58 },
+    eda: { delay: 480, duration: 3000, easing: "cubic-bezier(0.5,0,0.35,1)", trains: 2, speed: 50 },
+    ecomdash: { delay: 1060, duration: 1500, easing: "cubic-bezier(0.2,0,0.1,1)", trains: 1, speed: 84 },
+    founder: { delay: 1420, duration: 1900, easing: "cubic-bezier(0.5,0,0.1,1)", trains: 3, speed: 96 },
+  };
+
+  const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function bloomAt(x, y, color) {
+    const ring = svgEl("circle", {
+      cx: x,
+      cy: y,
+      r: 8,
+      fill: "none",
+      stroke: color,
+      "stroke-width": 3,
+      opacity: 0.85,
+      "pointer-events": "none",
+    });
+    MAPREFS.svg.appendChild(ring);
+    const anim = ring.animate(
+      [
+        { r: "8px", opacity: 0.85 },
+        { r: "26px", opacity: 0 },
+      ],
+      { duration: 700, easing: "cubic-bezier(0.2,0,0.3,1)" }
+    );
+    anim.onfinish = () => ring.remove();
+  }
+
+  function initLivingMap() {
+    if (!MAPREFS.svg) return;
+
+    const linePaths = Object.values(LINES).map((l) => MAPREFS.paths[l.id]);
+    const allHideable = [
+      MAPREFS.shared,
+      ...Object.values(MAPREFS.bullets),
+      ...MAPREFS.specials,
+      ...Object.values(MAPREFS.stations).flat(),
+    ];
+
+    if (reducedMotion()) {
+      startTrains(); // trains are also skipped inside when reduced
+      return;
+    }
+
+    // Prime: lines undrawn, everything else hidden.
+    Object.values(LINES).forEach((line) => {
+      [MAPREFS.paths[line.id], MAPREFS.casings[line.id]].forEach((p) => {
+        if (!p) return;
+        const len = p.getTotalLength();
+        p.style.strokeDasharray = len + " " + len;
+        p.style.strokeDashoffset = len;
+      });
+    });
+    allHideable.forEach((n) => (n.style.opacity = "0"));
+
+    let played = false;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || played) return;
+          played = true;
+          obs.disconnect();
+          playDrawIn();
+        });
+      },
+      { threshold: 0.35 }
+    );
+    obs.observe(MAPREFS.svg);
+
+    function playDrawIn() {
+      let lastEnd = 0;
+      Object.values(LINES).forEach((line) => {
+        const p = PERSONALITY[line.id];
+        lastEnd = Math.max(lastEnd, p.delay + p.duration);
+
+        [MAPREFS.paths[line.id], MAPREFS.casings[line.id]].forEach((pathEl) => {
+          if (!pathEl) return;
+          const len = pathEl.getTotalLength();
+          pathEl.animate(
+            [{ strokeDashoffset: len + "px" }, { strokeDashoffset: "0px" }],
+            { duration: p.duration, delay: p.delay, easing: p.easing, fill: "forwards" }
+          );
+          setTimeout(() => {
+            pathEl.style.strokeDasharray = "none";
+            pathEl.style.strokeDashoffset = "0";
+          }, p.delay + p.duration + 60);
+        });
+
+        // Bullet appears as the line departs; stations pop as it lands.
+        const bullet = MAPREFS.bullets[line.id];
+        if (bullet) fadeIn(bullet, p.delay + 260);
+        (MAPREFS.stations[line.id] || []).forEach((g, i) =>
+          fadeIn(g, p.delay + p.duration - 200 + i * 110)
+        );
+      });
+
+      // Interchanges, terminal, and shared track close the sequence.
+      fadeIn(MAPREFS.shared, lastEnd + 80);
+      MAPREFS.specials.forEach((g, i) => {
+        fadeIn(g, lastEnd + 140 + i * 130);
+        const c = g.querySelector("circle");
+        if (c) {
+          setTimeout(
+            () => bloomAt(+c.getAttribute("cx"), +c.getAttribute("cy"), "#111"),
+            lastEnd + 220 + i * 130
+          );
+        }
+      });
+
+      setTimeout(startTrains, lastEnd + 500);
+    }
+
+    function fadeIn(node, delay) {
+      node.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 380,
+        delay: delay,
+        easing: "ease-out",
+        fill: "forwards",
+      });
+      setTimeout(() => (node.style.opacity = "1"), delay + 420);
+    }
+  }
+
+  /* Trains: continuous pulses running About -> Digital Leadership, looping.
+     Paused when the map is offscreen or the tab is hidden. */
+
+  function startTrains() {
+    if (reducedMotion() || !MAPREFS.svg) return;
+
+    const trains = [];
+    Object.values(LINES).forEach((line) => {
+      const path = MAPREFS.paths[line.id];
+      const len = path.getTotalLength();
+      const p = PERSONALITY[line.id];
+      for (let i = 0; i < p.trains; i++) {
+        const dot = svgEl("circle", {
+          r: 5.5,
+          fill: line.color,
+          stroke: line.darkText ? "#111" : "#fff",
+          "stroke-width": 1.5,
+          "pointer-events": "none",
+        });
+        MAPREFS.svg.appendChild(dot);
+        trains.push({
+          dot: dot,
+          path: path,
+          len: len,
+          speed: p.speed,
+          offset: (len / p.trains) * i,
+          color: line.color,
+          lastBloom: 0,
+        });
+      }
+    });
+
+    const interchanges = [MAP.about, MAP.process];
+    let running = true;
+    let last = performance.now();
+    let t = 0;
+
+    const vis = new IntersectionObserver(
+      (es) => es.forEach((e) => (running = e.isIntersecting)),
+      { threshold: 0.05 }
+    );
+    vis.observe(MAPREFS.svg);
+    document.addEventListener("visibilitychange", () => {
+      last = performance.now();
+    });
+
+    function tick(now) {
+      const dt = Math.min(now - last, 100) / 1000;
+      last = now;
+      if (running && !document.hidden) {
+        t += dt;
+        trains.forEach((tr) => {
+          const s = (tr.offset + t * tr.speed) % tr.len;
+          const pt = tr.path.getPointAtLength(s);
+          tr.dot.setAttribute("cx", pt.x);
+          tr.dot.setAttribute("cy", pt.y);
+          // Calling at an interchange: bloom, at most once every 1.4s per train.
+          if (now - tr.lastBloom > 1400) {
+            for (const ic of interchanges) {
+              if (Math.abs(pt.x - ic.x) < 7 && Math.abs(pt.y - ic.y) < 7) {
+                tr.lastBloom = now;
+                bloomAt(ic.x, ic.y, tr.color);
+                break;
+              }
+            }
+          }
+        });
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
   }
 
   function scrollToTarget(sel) {
@@ -458,6 +678,7 @@
   }
 
   let activeStopId = null;
+  let lastArrivalId = null;
 
   function highlightTrunk(id) {
     const svg = document.getElementById("trunk-svg");
@@ -470,6 +691,78 @@
       c.setAttribute("opacity", active ? 1 : 0.35);
       c.setAttribute("r", active ? 14 : 9);
     });
+    if (id && id !== lastArrivalId) {
+      lastArrivalId = id;
+      playArrival(svg, id);
+    }
+  }
+
+  // Arrival choreography: the branch draws itself toward the platform, a
+  // train pulse runs down it, and the station dot blooms as the card lands.
+  function playArrival(svg, id) {
+    if (reducedMotion()) return;
+    const branch = svg.querySelector('[data-branch="' + id + '"]');
+    const station = svg.querySelector('[data-station="' + id + '"]');
+    if (!branch || !station) return;
+
+    const len = branch.getTotalLength();
+    const color = branch.getAttribute("stroke");
+
+    // 1. Draw the branch in.
+    branch.style.strokeDasharray = len + " " + len;
+    const draw = branch.animate(
+      [{ strokeDashoffset: len + "px" }, { strokeDashoffset: "0px" }],
+      { duration: 620, easing: "cubic-bezier(0.3,0,0.15,1)", fill: "forwards" }
+    );
+    draw.onfinish = () => {
+      branch.style.strokeDasharray = "none";
+      branch.style.strokeDashoffset = "0";
+    };
+
+    // 2. A pulse rides the fresh track.
+    const pulse = svgEl("circle", {
+      r: 6,
+      fill: color,
+      stroke: "#fff",
+      "stroke-width": 1.5,
+      "pointer-events": "none",
+    });
+    svg.appendChild(pulse);
+    const t0 = performance.now();
+    const ride = 560;
+    (function run(now) {
+      const k = Math.min((now - t0) / ride, 1);
+      const eased = 1 - Math.pow(1 - k, 2.2);
+      const pt = branch.getPointAtLength(eased * len);
+      pulse.setAttribute("cx", pt.x);
+      pulse.setAttribute("cy", pt.y);
+      if (k < 1) requestAnimationFrame(run);
+      else {
+        pulse.remove();
+        // 3. The station blooms on arrival.
+        const cx = +station.getAttribute("cx");
+        const cy = +station.getAttribute("cy");
+        const ring = svgEl("circle", {
+          cx: cx,
+          cy: cy,
+          r: 12,
+          fill: "none",
+          stroke: color,
+          "stroke-width": 3,
+          opacity: 0.9,
+          "pointer-events": "none",
+        });
+        svg.appendChild(ring);
+        const anim = ring.animate(
+          [
+            { r: "12px", opacity: 0.9 },
+            { r: "34px", opacity: 0 },
+          ],
+          { duration: 750, easing: "cubic-bezier(0.2,0,0.3,1)" }
+        );
+        anim.onfinish = () => ring.remove();
+      }
+    })(t0);
   }
 
   /* ---------- Scroll spy ---------- */
@@ -844,6 +1137,7 @@
     initServiceStatus();
     initParallax();
     initReveals();
+    initLivingMap();
     initDeepLinks();
     watchStops();
     drawTrunk();
