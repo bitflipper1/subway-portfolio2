@@ -25,6 +25,7 @@
           <span class="label">System Status</span>
           <span class="pill">Good Service</span>
         </div>
+        <button class="btn-sound" id="sound-toggle" type="button" aria-pressed="false" title="Door chime sound">♪ Off</button>
         <a class="btn-contact" href="#contact">Contact</a>
       </div>
     </div>
@@ -38,8 +39,17 @@
       <span style="background:#FCCC0A"></span>
     </div>
     <div class="hero-content">
-      <div class="hero-kicker">Express Service To</div>
-      <h1>Next Stop:<br /><span class="gradient">Great UX</span></h1>
+      <div class="hero-kicker">Next Stop</div>
+      <div class="uptown-frame">
+        <div class="uptown-sign">
+          <h1>Great UX</h1>
+          <div class="uptown-bar">
+            <span class="uptown-arrow" aria-hidden="true">↗</span>
+            <span class="uptown-dir">Express service<br />to all projects</span>
+            <span class="uptown-bullets" id="hero-bullets"></span>
+          </div>
+        </div>
+      </div>
       <p>Navigating the complex underground of product design, strategy, and user research — from Fortune 100 platforms to founder-built startups.</p>
       <div class="scroll-cue" aria-hidden="true">▼</div>
     </div>
@@ -133,6 +143,11 @@
       </div>
     </div>
   </footer>
+
+  <nav class="strip-map" id="strip-map" aria-label="Ride progress — stations on this trip">
+    <span class="strip-now" id="strip-now">Board at any station</span>
+    <div class="strip-inner" id="strip-inner"></div>
+  </nav>
 
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

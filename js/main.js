@@ -302,17 +302,44 @@
         })
       );
 
+      // Case study sits on the platform behind a pair of sliding doors,
+      // headed by a 28th-St-style mosaic station band.
+      const doors = el("div", { class: "doors", "aria-hidden": "true" }, [
+        el("div", { class: "door left" }, [
+          el("span", { class: "door-window" }),
+          el("span", { class: "door-sticker", text: "Stand clear" }),
+        ]),
+        el("div", { class: "door right" }, [
+          el("span", { class: "door-window" }),
+          el("span", { class: "door-sticker", text: "of the doors" }),
+        ]),
+      ]);
+      const caseWrap = el("div", { class: "case-wrap" }, [
+        el("div", { class: "mosaic" }, [
+          el("span", { class: "mosaic-text", text: project.station }),
+        ]),
+        caseStudy,
+        doors,
+      ]);
+
       const toggle = el("button", {
         class: "stop-toggle",
         type: "button",
         "aria-expanded": "false",
-        text: "View Station →",
+        text: "Open Doors →",
       });
 
       const card = el(
         "div",
         { class: "stop-card" },
         [
+          el("div", { class: "led-board", "aria-hidden": "true" }, [
+            el("span", { class: "led-dot" }),
+            el("span", {
+              text:
+                project.station + " · stop " + (index + 1) + " of " + PROJECTS.length,
+            }),
+          ]),
           el("div", { class: "line-tag" }, [
             bulletEl(line, true),
             el("span", { class: "line-label", text: line.name + " · " + project.station + " St" }),
@@ -330,15 +357,29 @@
             el("p", { text: project.impact }),
           ]),
           toggle,
-          caseStudy,
+          caseWrap,
         ]
       );
       card.style.setProperty("--line-color", line.color);
 
       toggle.addEventListener("click", () => {
-        const open = card.classList.toggle("open");
-        toggle.setAttribute("aria-expanded", String(open));
-        toggle.textContent = open ? "Exit Station ←" : "View Station →";
+        const opening = !card.classList.contains("open");
+        toggle.setAttribute("aria-expanded", String(opening));
+        toggle.textContent = opening ? "Exit Station ←" : "Open Doors →";
+        if (opening) {
+          card.classList.add("open");
+          // Two frames so the closed doors paint before they slide apart.
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              card.classList.add("doors-open");
+              doorChime();
+            })
+          );
+        } else {
+          card.classList.remove("doors-open", "open");
+        }
+        // Card height changed — reflow the trunk backdrop behind the feed.
+        setTimeout(drawTrunk, 60);
       });
 
       feed.appendChild(
@@ -451,12 +492,171 @@
             document.querySelectorAll(".stop-card").forEach((c) => c.classList.remove("active"));
             entry.target.querySelector(".stop-card").classList.add("active");
             highlightTrunk(activeStopId);
+            updateStrip(activeStopId);
           }
         });
       },
       { rootMargin: "-40% 0px -40% 0px", threshold: 0 }
     );
     document.querySelectorAll(".stop").forEach((s) => observer.observe(s));
+  }
+
+  /* ---------- In-car strip map ---------- */
+
+  function buildStripMap() {
+    const inner = document.getElementById("strip-inner");
+    if (!inner) return;
+
+    const end = (label, target) => {
+      const b = el("button", {
+        class: "strip-end",
+        type: "button",
+        "aria-label": label,
+        title: label,
+      });
+      b.addEventListener("click", () => scrollToTarget(target));
+      return b;
+    };
+
+    inner.appendChild(end("About Me — start of the line", "#about"));
+    PROJECTS.forEach((p, i) => {
+      const seg = el("span", { class: "strip-seg", "aria-hidden": "true" });
+      seg.style.background = LINES[p.lineId].color;
+      inner.appendChild(seg);
+
+      const dot = el("button", {
+        class: "strip-dot",
+        type: "button",
+        "data-strip": p.id,
+        "aria-label": p.station + " — stop " + (i + 1) + " of " + PROJECTS.length,
+        title: p.station,
+      });
+      dot.style.setProperty("--dot-color", LINES[p.lineId].color);
+      dot.addEventListener("click", () => scrollToTarget("#stop-" + p.id));
+      inner.appendChild(dot);
+    });
+    const lastSeg = el("span", { class: "strip-seg", "aria-hidden": "true" });
+    lastSeg.style.background = "#0b0b0b";
+    inner.appendChild(lastSeg);
+    inner.appendChild(end("Contact — terminal", "#contact"));
+  }
+
+  function updateStrip(id) {
+    const now = document.getElementById("strip-now");
+    const idx = PROJECTS.findIndex((p) => p.id === id);
+    if (now && idx >= 0) now.textContent = "This is " + PROJECTS[idx].station;
+    document.querySelectorAll(".strip-dot").forEach((d, i) => {
+      d.classList.toggle("current", d.dataset.strip === id);
+      d.classList.toggle("passed", idx >= 0 && i < idx);
+    });
+  }
+
+  /* ---------- Door chime + sound toggle ---------- */
+
+  let soundOn = false;
+  try {
+    soundOn = localStorage.getItem("dm_sound") === "1";
+  } catch (e) { /* storage unavailable — sound stays off */ }
+
+  function doorChime() {
+    if (!soundOn) return;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      doorChime.ctx = doorChime.ctx || new Ctx();
+      const ctx = doorChime.ctx;
+      const t = ctx.currentTime;
+      // The two-tone "doors closing" chime: E5 then C5.
+      [[659.25, 0, 0.3], [523.25, 0.24, 0.55]].forEach(([freq, off, dur]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.0001, t + off);
+        gain.gain.exponentialRampToValueAtTime(0.16, t + off + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + off + dur);
+        osc.start(t + off);
+        osc.stop(t + off + dur + 0.05);
+      });
+    } catch (e) { /* audio unavailable */ }
+  }
+
+  function initSoundToggle() {
+    const btn = document.getElementById("sound-toggle");
+    if (!btn) return;
+    const render = () => {
+      btn.setAttribute("aria-pressed", String(soundOn));
+      btn.textContent = soundOn ? "♪ On" : "♪ Off";
+    };
+    render();
+    btn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      try {
+        localStorage.setItem("dm_sound", soundOn ? "1" : "0");
+      } catch (e) { /* ignore */ }
+      render();
+      if (soundOn) doorChime();
+    });
+  }
+
+  /* ---------- MetroCard swipe ---------- */
+
+  function initMetroCard() {
+    const cardEl = document.getElementById("contact-card");
+    if (!cardEl) return;
+    const statusEl = cardEl.querySelector(".swipe span:first-child");
+    const defaultText = statusEl.textContent;
+    let startX = null;
+    let startT = 0;
+    let moved = false;
+    let verdict = null; // null = plain click, "ok" | "slow" | "fast"
+    let resetTimer;
+
+    const setStatus = (text, cls) => {
+      statusEl.textContent = text;
+      statusEl.className = cls || "";
+      clearTimeout(resetTimer);
+      if (text !== defaultText) {
+        resetTimer = setTimeout(() => setStatus(defaultText, ""), 2600);
+      }
+    };
+
+    cardEl.addEventListener("pointerdown", (e) => {
+      startX = e.clientX;
+      startT = performance.now();
+      moved = false;
+      verdict = null;
+    });
+    cardEl.addEventListener("pointermove", (e) => {
+      if (startX !== null && Math.abs(e.clientX - startX) > 12) moved = true;
+    });
+    cardEl.addEventListener("pointerup", (e) => {
+      if (startX === null) return;
+      const dx = Math.abs(e.clientX - startX);
+      const speed = dx / Math.max(performance.now() - startT, 1); // px per ms
+      if (moved && dx > 60) {
+        verdict = speed < 0.18 ? "slow" : speed > 2.6 ? "fast" : "ok";
+      }
+      startX = null;
+    });
+    cardEl.addEventListener("click", (e) => {
+      if (verdict === "slow" || verdict === "fast") {
+        e.preventDefault();
+        setStatus(
+          verdict === "slow" ? "Too slow — please swipe again" : "Too fast — please swipe again",
+          "status-err"
+        );
+      } else if (verdict === "ok") {
+        e.preventDefault();
+        setStatus("GO. Enjoy your ride", "status-ok");
+        setTimeout(() => {
+          window.location.href = cardEl.href;
+        }, 650);
+      }
+      // Plain click (no swipe): fall through to the mailto link.
+      verdict = null;
+    });
   }
 
   /* ---------- About / process / footer ---------- */
@@ -511,6 +711,12 @@
 
   /* ---------- Boot ---------- */
 
+  function buildHeroBullets() {
+    const wrap = document.getElementById("hero-bullets");
+    if (!wrap) return;
+    Object.values(LINES).forEach((line) => wrap.appendChild(bulletEl(line, true)));
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     buildSystemMap();
     buildLegend();
@@ -518,6 +724,10 @@
     buildAbout();
     buildProcess();
     buildFooter();
+    buildHeroBullets();
+    buildStripMap();
+    initSoundToggle();
+    initMetroCard();
     watchStops();
     drawTrunk();
 
