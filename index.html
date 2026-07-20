@@ -69,6 +69,13 @@
     </div>
   </section>
 
+  <div class="tunnel" aria-hidden="true">
+    <div class="tunnel-girders"></div>
+    <div class="tunnel-lights l1"></div>
+    <div class="tunnel-lights l2"></div>
+    <span class="tunnel-sign">Now entering the tunnel &bull; 7 project stops ahead</span>
+  </div>
+
   <div class="feed" id="feed">
     <svg class="trunk-svg" id="trunk-svg" aria-hidden="true"></svg>
     <div class="feed-inner" id="feed-inner"><!-- project stops render here --></div>
@@ -112,6 +119,51 @@
     </div>
   </section>
 
+  <section class="car-section" id="car">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Take a Seat</h2>
+        <span class="sub">In-car advertising &bull; Paid for by the Matt Transit Authority</span>
+      </div>
+    </div>
+    <div class="car">
+      <div class="car-ads">
+        <a class="car-ad" href="#stop-topbid-ds">
+          <span class="ad-head">Tired of design debt?</span>
+          <span class="ad-body">500+ component design systems. Zero offshore delays. Ride the A line to TopBid System St.</span>
+        </a>
+        <a class="car-ad" href="#stop-reprevive">
+          <span class="ad-head">Bad reviews got you down?</span>
+          <span class="ad-body">RepRevive turns angry riders into loyal fans — before they post. Transfer to the S at RepRevive St.</span>
+        </a>
+        <a class="car-ad" href="#contact">
+          <span class="ad-head">This space intentionally well-designed.</span>
+          <span class="ad-body">Your product could look this good. Advertise your job opening: matt@designmatt-ers.com</span>
+        </a>
+      </div>
+      <div class="car-strap-rail" aria-hidden="true"></div>
+      <div class="car-straps" aria-hidden="true">
+        <span class="strap"></span><span class="strap"></span><span class="strap"></span><span class="strap"></span><span class="strap"></span>
+      </div>
+      <div class="car-windows" aria-hidden="true">
+        <span class="car-window"><span class="streak"></span></span>
+        <span class="car-window"><span class="streak"></span></span>
+        <span class="car-window"><span class="streak"></span></span>
+      </div>
+      <div class="priority-sign">Priority seating for recruiters &amp; hiring managers</div>
+      <div class="car-bench" aria-hidden="true">
+        <span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span>
+      </div>
+      <div class="car-floor" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <a class="exit-sign" href="#contact">
+    <span class="exit-word">Exit</span>
+    <span class="exit-arrow" aria-hidden="true">→</span>
+    <span class="exit-detail">Contact &amp; service information</span>
+  </a>
+
   <footer class="site-footer" id="contact">
     <div class="container">
       <div class="footer-grid">
@@ -132,7 +184,7 @@
           <h3>Service Lines</h3>
           <ul class="service-lines" id="footer-lines"></ul>
         </div>
-        <div>
+        <div id="rider-alerts">
           <h3>Rider Alerts</h3>
           <p class="muted">Planned service change: this portfolio is under active construction. Expect new stations to open without notice. No weekend outages anticipated.</p>
           <p class="muted">“Great design is invisible — like a train that's always on time.”</p>

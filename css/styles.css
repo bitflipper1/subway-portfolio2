@@ -1243,3 +1243,313 @@ body {
   width: fit-content;
   margin: 0 auto 40px;
 }
+
+/* ==========================================================================
+   Tier 2 — tunnel, tiled walls, subway car, exit signage
+   ========================================================================== */
+
+/* ---------- Tunnel band ---------- */
+
+.tunnel {
+  position: relative;
+  height: 150px;
+  background: #0c0d10;
+  border-bottom: 4px solid #000;
+  overflow: hidden;
+}
+
+.tunnel-girders {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, #171a20 0 14px, transparent 14px 170px);
+}
+
+.tunnel-lights {
+  position: absolute;
+  left: -340px;
+  right: -340px;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, #ffd98a 0 26px, transparent 26px 340px);
+  filter: blur(1px);
+  animation: lightsMove 2.4s linear infinite;
+}
+
+.tunnel-lights.l1 {
+  top: 38px;
+  opacity: 0.85;
+}
+
+.tunnel-lights.l2 {
+  top: 98px;
+  animation-duration: 3.6s;
+  opacity: 0.45;
+}
+
+@keyframes lightsMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(-340px); }
+}
+
+.tunnel-sign {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #9298a1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Tiled station wall for About (96th St style) ---------- */
+
+#about {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1.5px, transparent 1.5px),
+    #f3f1ec;
+  background-size: 100% 30px, 60px 100%, 100%;
+  border-bottom: 10px solid #d9ad00;
+}
+
+#about .info-grid {
+  background: #fff;
+  border: 1px solid #e4e2dc;
+  padding: 36px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- Subway car interior ---------- */
+
+.car-section {
+  background: #101114;
+  border-top: 4px solid #000;
+  padding: 70px 0 0;
+}
+
+.car-section .section-heading h2 {
+  color: #fff;
+}
+
+.car-section .section-heading .sub {
+  color: #9298a1;
+}
+
+.car {
+  max-width: 1020px;
+  margin: 36px auto 0;
+  background: #d9dbdd;
+  border: 6px solid #9ea2a8;
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.car-ads {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  background: #c3c6cb;
+  border-bottom: 4px solid #9ea2a8;
+  align-items: stretch;
+}
+
+.car-ad {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  background: #fff;
+  border: 2px solid #6d7178;
+  padding: 12px 14px;
+  text-decoration: none;
+  transition: transform 0.15s;
+}
+
+.car-ad:hover {
+  transform: translateY(-2px);
+  outline: 3px solid var(--blue);
+}
+
+.car-ad .ad-head {
+  display: block;
+  font-weight: 900;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: #0b0b0b;
+  margin-bottom: 6px;
+}
+
+.car-ad .ad-body {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #444;
+}
+
+.car-strap-rail {
+  height: 10px;
+  background: #8b8f96;
+  margin: 14px 46px 0;
+  border-radius: 5px;
+}
+
+.car-straps {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 70px;
+  height: 52px;
+}
+
+.strap {
+  width: 6px;
+  height: 26px;
+  background: #7d8187;
+  position: relative;
+}
+
+.strap::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border: 5px solid #cfc7b8;
+  border-radius: 50%;
+}
+
+.car-windows {
+  display: flex;
+  gap: 26px;
+  padding: 6px 30px 18px;
+}
+
+.car-window {
+  flex: 1;
+  height: 120px;
+  background: #0c0d10;
+  border: 6px solid #9ea2a8;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.car-window .streak {
+  position: absolute;
+  top: 42%;
+  left: -230px;
+  right: -230px;
+  height: 5px;
+  background: repeating-linear-gradient(90deg, #ffd98a 0 30px, transparent 30px 230px);
+  filter: blur(1px);
+  animation: lightsMove 1.7s linear infinite;
+}
+
+.priority-sign {
+  width: fit-content;
+  margin: 0 auto 10px;
+  background: #fff;
+  border: 2px solid #000;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #0b0b0b;
+}
+
+.car-bench {
+  display: flex;
+  gap: 6px;
+  padding: 0 30px 18px;
+}
+
+.seat {
+  flex: 1;
+  height: 54px;
+  background: #2456a8;
+  border-radius: 9px 9px 4px 4px;
+  border-bottom: 7px solid #163a75;
+}
+
+.car-floor {
+  height: 28px;
+  background:
+    radial-gradient(circle at 20% 40%, rgba(255, 255, 255, 0.12) 1px, transparent 2px),
+    radial-gradient(circle at 65% 70%, rgba(255, 255, 255, 0.1) 1px, transparent 2px),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.1) 1px, transparent 2px),
+    #6f7278;
+  background-size: 60px 40px, 80px 50px, 50px 35px, 100%;
+}
+
+/* ---------- Exit signage ---------- */
+
+.exit-sign {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #000;
+  color: #fff;
+  padding: 16px 28px;
+  text-decoration: none;
+  border-top: 4px solid #fff;
+}
+
+.exit-word,
+.exit-arrow {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.exit-arrow {
+  transition: transform 0.2s;
+}
+
+.exit-sign:hover .exit-arrow {
+  transform: translateX(8px);
+}
+
+.exit-detail {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #cfcfcf;
+  text-align: right;
+}
+
+/* ---------- Weekend planned-work pill (black on MTA orange) ---------- */
+
+.pill-work {
+  background: #ff6319 !important;
+  color: #111 !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tunnel-lights,
+  .car-window .streak {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .car-ads {
+    flex-direction: column;
+  }
+  .car-straps {
+    display: none;
+  }
+  .car-windows {
+    gap: 12px;
+    padding-top: 16px;
+  }
+}

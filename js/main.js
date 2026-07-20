@@ -368,6 +368,7 @@
         toggle.textContent = opening ? "Exit Station ←" : "Open Doors →";
         if (opening) {
           card.classList.add("open");
+          history.replaceState(null, "", "#stop-" + project.id);
           // Two frames so the closed doors paint before they slide apart.
           requestAnimationFrame(() =>
             requestAnimationFrame(() => {
@@ -717,6 +718,68 @@
     Object.values(LINES).forEach((line) => wrap.appendChild(bulletEl(line, true)));
   }
 
+  /* ---------- Weekend service change (an authentic MTA experience) ---------- */
+
+  function initServiceStatus() {
+    const day = new Date().getDay();
+    if (day !== 0 && day !== 6) return;
+    const pill = document.querySelector(".service-status .pill");
+    if (pill) {
+      pill.textContent = "Planned Work";
+      pill.classList.add("pill-work");
+    }
+    const alerts = document.getElementById("rider-alerts");
+    if (alerts) {
+      const note = el("p", {
+        class: "muted",
+        text:
+          "Weekend service change: the S Founder Shuttle is running local. Allow extra travel time and expect creative delays.",
+      });
+      alerts.insertBefore(note, alerts.children[1]);
+    }
+  }
+
+  /* ---------- Tunnel parallax ---------- */
+
+  function initParallax() {
+    const girders = document.querySelector(".tunnel-girders");
+    if (!girders) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          girders.style.backgroundPositionX = -window.scrollY * 0.35 + "px";
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+  }
+
+  /* ---------- Deep links: #stop-<id> opens that station's doors ---------- */
+
+  function initDeepLinks() {
+    const openFromHash = () => {
+      const m = location.hash.match(/^#stop-([\w-]+)$/);
+      if (!m) return;
+      const stopEl = document.getElementById("stop-" + m[1]);
+      if (!stopEl) return;
+      const card = stopEl.querySelector(".stop-card");
+      const toggle = stopEl.querySelector(".stop-toggle");
+      if (card && toggle && !card.classList.contains("open")) toggle.click();
+      setTimeout(
+        () => stopEl.scrollIntoView({ behavior: "smooth", block: "center" }),
+        120
+      );
+    };
+    window.addEventListener("hashchange", openFromHash);
+    setTimeout(openFromHash, 350);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     buildSystemMap();
     buildLegend();
@@ -728,6 +791,9 @@
     buildStripMap();
     initSoundToggle();
     initMetroCard();
+    initServiceStatus();
+    initParallax();
+    initDeepLinks();
     watchStops();
     drawTrunk();
 
