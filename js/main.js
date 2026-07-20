@@ -292,16 +292,6 @@
         caseStudy.appendChild(el("h4", { text: section.heading }));
         caseStudy.appendChild(el("p", { text: section.body }));
       });
-      caseStudy.appendChild(
-        el("a", {
-          class: "source-link",
-          href: project.link,
-          target: "_blank",
-          rel: "noopener",
-          text: "Original case study ↗",
-        })
-      );
-
       // Case study sits on the platform behind a pair of sliding doors,
       // headed by a 28th-St-style mosaic station band.
       const doors = el("div", { class: "doors", "aria-hidden": "true" }, [

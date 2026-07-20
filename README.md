@@ -1,7 +1,7 @@
 # DesignMatt-ers — NYC Subway Edition
 
-A redesign of [designmatt-ers.com](https://designmatt-ers.com) as an interactive,
-Vignelli-inspired NYC subway map. **Each line is a company; each station is a project.**
+Matt McGlothlin's UX portfolio as an interactive NYC subway map — the
+portfolio of record, hosting all case studies directly. **Each line is a company; each station is a project.**
 
 | Line | Bullet | Company / Theme | Stations |
 | --- | --- | --- | --- |
@@ -46,5 +46,5 @@ A GitHub Pages workflow is included (`.github/workflows/pages.yml`). One-time se
 
 After that, every push to `main` deploys automatically.
 
-Case-study content was sourced from the live designmatt-ers.com site; each
-station links back to its original case study page.
+All case-study content lives in `js/data.js` — this site is fully
+self-contained and has no dependency on any other host.

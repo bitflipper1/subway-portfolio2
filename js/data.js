@@ -1,6 +1,6 @@
 // DesignMatt-ers — NYC Subway Edition
 // Lines = companies / chapters of Matt's career. Stations = projects.
-// Content sourced from designmatt-ers.com.
+// All case-study content lives here — this site is the portfolio of record.
 
 const LINES = {
   honeywell: {
@@ -61,7 +61,6 @@ const PROJECTS = [
         body: "The new experience empowers industrial workers, safety managers and technicians through AI, NFC and a modern design system. AI capabilities include Maintenance Assist (context-aware troubleshooting), Predictive Analytics (fleet readiness inferred from calibration and test logs) and Behavioral AI (worker data predicts risk patterns). I defined the onboarding flow, AI interactions and dashboard systems, and helped shape the integration of Honeywell Forge 2.0 across the experience. NFC/QR-based device assignment became a key competitive differentiator.",
       },
     ],
-    link: "https://designmatt-ers.com/safety-suite-transformation",
   },
   {
     id: "lifecare",
@@ -88,7 +87,6 @@ const PROJECTS = [
         body: "The platform achieved its goal of integrating critical clinical communication (Systevo Nurse Call) and medication administration (ILC Medication App) into seamless, reliable experiences guided by a unified design language.",
       },
     ],
-    link: "https://designmatt-ers.com/integrated-lifecare-platform",
   },
   {
     id: "eda-redesign",
@@ -115,7 +113,6 @@ const PROJECTS = [
         body: "The team concluded a responsive experience would be far better than the existing unusable mobile web experience, and the redesign moved forward on that foundation.",
       },
     ],
-    link: "https://designmatt-ers.com/eda-responsive-redesign",
   },
   {
     id: "topbid-ds",
@@ -142,7 +139,6 @@ const PROJECTS = [
         body: "The development process became much more efficient, and the product team launched the new TopBid interface using Agile, working closely with developers and business analysts.",
       },
     ],
-    link: "https://designmatt-ers.com/topbid-design-system",
   },
   {
     id: "topbid-mobile",
@@ -165,7 +161,6 @@ const PROJECTS = [
         body: "The team created a working prototype along with sales materials that were used in presentations to internal stakeholders.",
       },
     ],
-    link: "https://designmatt-ers.com/top-bid-mobile-app",
   },
   {
     id: "ecomdash-onboarding",
@@ -192,7 +187,6 @@ const PROJECTS = [
         body: "Shopify proved best-in-class for onboarding simplicity — linear, guided setup with clear progress states and contextual tooltips. The takeaways drove the redesign: reduce the number of setup screens and give users a sense of completion to keep them moving. The work landed as a simplified onboarding experience and a standardized design system.",
       },
     ],
-    link: "https://designmatt-ers.com/ecomdash-onboarding-design-system",
   },
   {
     id: "reprevive",
@@ -215,7 +209,6 @@ const PROJECTS = [
         body: "Based on their survey response, customers are encouraged down the right path: leave private feedback, follow the business on social media, or post a public review. Happy customers amplify; unhappy customers get heard before they post.",
       },
     ],
-    link: "https://designmatt-ers.com/reputation-management-mobile-app-reprevivecom",
   },
 ];
 
@@ -242,7 +235,6 @@ const ABOUT = {
     "Along the way I've founded companies of my own: RepRevive (online reputation management), AdSpark (promotional products and store integration), and Bitflip (website design, development and hosting).",
     "I treat UX like a transit system: it should be efficient, clear, and get people where they need to go without confusion.",
   ],
-  link: "https://designmatt-ers.com/about-1",
 };
 
 const PROCESS = {
@@ -266,11 +258,9 @@ const PROCESS = {
       body: "Leadership grows by accepting daunting design challenges and inspiring the people around you — usually by discovering the superpowers each team member already possesses and fostering open collaboration.",
     },
   ],
-  link: "https://designmatt-ers.com/digital-leadership-design-process",
 };
 
 const CONTACT = {
   email: "matt@designmatt-ers.com",
-  site: "https://designmatt-ers.com",
   linkedin: "https://www.linkedin.com/in/bitflip",
 };
