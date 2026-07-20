@@ -6,7 +6,7 @@
   <title>DesignMatt-ers | NYC Subway Edition — Matt McGlothlin, UX Design Leader</title>
   <meta name="description" content="The UX portfolio of Matt McGlothlin, reimagined as a NYC subway map. Each line is a company, each station a project: Honeywell, EDA/Top Bid, Ecomdash, and founder ventures." />
   <link rel="stylesheet" href="css/styles.css" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23EE352E'/%3E%3Ctext x='50' y='68' font-size='55' font-weight='bold' font-family='Helvetica,Arial' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%231F3C47'/%3E%3Ctext x='50' y='68' font-size='55' font-weight='bold' font-family='Helvetica,Arial' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
 </head>
 <body>
 
@@ -31,27 +31,25 @@
     </div>
   </header>
 
-  <section class="hero">
+  <section class="hero grain">
     <div class="hero-lines" aria-hidden="true">
-      <span style="background:#EE352E"></span>
-      <span style="background:#0039A6"></span>
-      <span style="background:#00933C"></span>
-      <span style="background:#FCCC0A"></span>
+      <span style="background:#b4654a"></span>
+      <span style="background:#f3efed"></span>
+      <span style="background:#6f8272"></span>
+      <span style="background:#ffa36f"></span>
     </div>
     <div class="hero-content">
-      <div class="hero-kicker">Next Stop</div>
-      <div class="uptown-frame">
-        <div class="uptown-sign">
-          <h1>Great UX</h1>
-          <div class="uptown-bar">
-            <span class="uptown-arrow" aria-hidden="true">↗</span>
-            <span class="uptown-dir">Express service<br />to all projects</span>
-            <span class="uptown-bullets" id="hero-bullets"></span>
-          </div>
-        </div>
-      </div>
-      <p>Navigating the complex underground of product design, strategy, and user research — from Fortune 100 platforms to founder-built startups.</p>
-      <div class="scroll-cue" aria-hidden="true">▼</div>
+      <div class="hero-kicker">( 01 ) &mdash; Express service &bull; Now departing</div>
+      <h1>Next stop:<br /><span class="accent">great UX.</span></h1>
+      <p>A UX portfolio drawn as a transit system. Each line is a company, each station a project — from Fortune 100 platforms to founder-built startups.</p>
+      <ul class="hero-index">
+        <li><a href="#map"><span class="num">01</span>System map</a></li>
+        <li><a href="#feed"><span class="num">02</span>Stations</a></li>
+        <li><a href="#about"><span class="num">03</span>About</a></li>
+        <li><a href="#process"><span class="num">04</span>Digital leadership</a></li>
+        <li><a href="#contact"><span class="num">05</span>Contact</a></li>
+      </ul>
+      <div class="hero-bullets-row" id="hero-bullets"></div>
     </div>
   </section>
 
@@ -92,14 +90,14 @@
           <p class="lede" id="about-tagline"></p>
           <div id="about-body"></div>
           <div class="line-swatches" aria-hidden="true">
-            <span style="background:#EE352E"></span>
-            <span style="background:#0039A6"></span>
-            <span style="background:#00933C"></span>
-            <span style="background:#FCCC0A"></span>
+            <span style="background:#b4654a"></span>
+            <span style="background:#1f3c47"></span>
+            <span style="background:#6f8272"></span>
+            <span style="background:#a8852b"></span>
           </div>
         </div>
         <div>
-          <h3 style="font-weight:900; text-transform:uppercase; margin-bottom:18px;">Founder Shuttle stops</h3>
+          <h3 style="font-weight:600; letter-spacing:-0.01em; color:#1f3c47; margin-bottom:18px;">Founder Shuttle stops</h3>
           <ul class="service-lines" id="founder-stations" style="color:inherit;"></ul>
           <p style="margin-top:22px;"><a class="text-link" href="https://designmatt-ers.com/about-1" target="_blank" rel="noopener">Full story on designmatt-ers.com ↗</a></p>
         </div>
@@ -122,39 +120,26 @@
   <section class="car-section" id="car">
     <div class="container">
       <div class="section-heading">
-        <h2>Take a Seat</h2>
-        <span class="sub">In-car advertising &bull; Paid for by the Matt Transit Authority</span>
+        <h2>In-car advertising</h2>
+        <span class="sub">( Advertisement ) &bull; Paid for by the Matt Transit Authority</span>
       </div>
     </div>
-    <div class="car">
-      <div class="car-ads">
-        <a class="car-ad" href="#stop-topbid-ds">
-          <span class="ad-head">Tired of design debt?</span>
-          <span class="ad-body">500+ component design systems. Zero offshore delays. Ride the A line to TopBid System St.</span>
-        </a>
-        <a class="car-ad" href="#stop-reprevive">
-          <span class="ad-head">Bad reviews got you down?</span>
-          <span class="ad-body">RepRevive turns angry riders into loyal fans — before they post. Transfer to the S at RepRevive St.</span>
-        </a>
-        <a class="car-ad" href="#contact">
-          <span class="ad-head">This space intentionally well-designed.</span>
-          <span class="ad-body">Your product could look this good. Advertise your job opening: matt@designmatt-ers.com</span>
-        </a>
-      </div>
-      <div class="car-strap-rail" aria-hidden="true"></div>
-      <div class="car-straps" aria-hidden="true">
-        <span class="strap"></span><span class="strap"></span><span class="strap"></span><span class="strap"></span><span class="strap"></span>
-      </div>
-      <div class="car-windows" aria-hidden="true">
-        <span class="car-window"><span class="streak"></span></span>
-        <span class="car-window"><span class="streak"></span></span>
-        <span class="car-window"><span class="streak"></span></span>
-      </div>
-      <div class="priority-sign">Priority seating for recruiters &amp; hiring managers</div>
-      <div class="car-bench" aria-hidden="true">
-        <span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span>
-      </div>
-      <div class="car-floor" aria-hidden="true"></div>
+    <div class="poster-wall">
+      <a class="poster p-petrol" href="#stop-topbid-ds">
+        <span class="poster-tag">Ligne A &bull; Design systems</span>
+        <span class="poster-head">Tired of design debt?</span>
+        <span class="poster-body">500+ component design systems. Zero offshore delays. Ride the A line to TopBid System St.</span>
+      </a>
+      <a class="poster p-peach" href="#stop-reprevive">
+        <span class="poster-tag">Ligne S &bull; Founder shuttle</span>
+        <span class="poster-head">Bad reviews got you down?</span>
+        <span class="poster-body">RepRevive turns angry riders into loyal fans — before they post. Transfer to the S at RepRevive St.</span>
+      </a>
+      <a class="poster p-slate" href="#contact">
+        <span class="poster-tag">Terminal &bull; Contact</span>
+        <span class="poster-head">This space intentionally well&#8209;designed.</span>
+        <span class="poster-body">Your product could look this good. Advertise your job opening: matt@designmatt-ers.com</span>
+      </a>
     </div>
   </section>
 

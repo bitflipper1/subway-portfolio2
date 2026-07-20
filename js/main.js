@@ -98,7 +98,7 @@
     svg.appendChild(
       svgEl("path", {
         d: "M " + MAP.process.x + " " + MAP.process.y + " L " + MAP.contact.x + " " + MAP.contact.y,
-        stroke: "#0b0b0b",
+        stroke: "#1f3c47",
         "stroke-width": 10,
         fill: "none",
         "stroke-linecap": "round",
@@ -158,7 +158,7 @@
           dy: "0.36em",
           "font-size": "19",
           "font-weight": "700",
-          fill: line.darkText ? "#111" : "#fff",
+          fill: line.darkText ? "#14262e" : "#f3efed",
           text: line.bullet,
         })
       );
@@ -189,7 +189,7 @@
           cx: st.x,
           cy: r.y,
           r: dotR,
-          fill: "#fff",
+          fill: "#fcfaf8",
           stroke: line.color,
           "stroke-width": 5,
         })
@@ -225,7 +225,7 @@
     specials.forEach((s) => {
       const g = svgEl("g", { class: "station", tabindex: "0", role: "link" });
       g.appendChild(
-        svgEl("circle", { cx: s.x, cy: s.y, r: 13, fill: "#fff", stroke: "#0b0b0b", "stroke-width": 5 })
+        svgEl("circle", { cx: s.x, cy: s.y, r: 13, fill: "#fcfaf8", stroke: "#1f3c47", "stroke-width": 5 })
       );
       g.appendChild(
         svgEl("text", {
@@ -455,7 +455,7 @@
           cx: stationX,
           cy: y,
           r: 9,
-          fill: "#fff",
+          fill: "#fcfaf8",
           stroke: line.color,
           "stroke-width": 6,
           opacity: 0.35,
