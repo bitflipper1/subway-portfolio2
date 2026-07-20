@@ -1,37 +1,8 @@
 /* DesignMatt-ers — NYC Subway Edition
-   Editorial identity: deep petrol, warm ivory, soft peach.
-   Type: Hanken Grotesk (display/body) + IBM Plex Mono (wayfinding). */
+   "Visual Index" theme: near-black editorial canvas, white Helvetica,
+   MTA yellow accent marks, authentic MTA line colors on light cards.
+   Wayfinding labels: IBM Plex Mono. */
 
-/* ---------- Fonts (self-hosted, latin subsets) ---------- */
-
-@font-face {
-  font-family: "Hanken Grotesk";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/hanken-grotesk-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Hanken Grotesk";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/hanken-grotesk-latin-500-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Hanken Grotesk";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("../fonts/hanken-grotesk-latin-600-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Hanken Grotesk";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/hanken-grotesk-latin-700-normal.woff2") format("woff2");
-}
 @font-face {
   font-family: "IBM Plex Mono";
   font-style: normal;
@@ -43,27 +14,29 @@
 /* ---------- Tokens ---------- */
 
 :root {
-  --petrol: #1f3c47;
-  --petrol-deep: #14262e;
-  --petrol-soft: #22434f;
-  --slate: #2a5262;
-  --paper: #f3efed;
-  --card: #fcfaf8;
-  --peach: #ffa36f;
-  --terracotta: #b4654a;
-  --sage: #6f8272;
-  --ochre: #a8852b;
-  --ink: #14262e;
-  --muted: #5b6b72;
-  --hairline: rgba(31, 60, 71, 0.16);
-  --sans: "Hanken Grotesk", Helvetica, Arial, sans-serif;
+  --bg: #0d0d0d;
+  --panel: #151515;
+  --sign: #0f0f0f;
+  --card: #f7f7f5;
+  --text: #f2f2f2;
+  --dim: #9c9c9c;
+  --dim-strong: #b5b5b5;
+  --yellow: #fccc0a;
+  --mta-red: #ee352e;
+  --mta-blue: #0039a6;
+  --mta-green: #00933c;
+  --hairline: rgba(255, 255, 255, 0.14);
+  --card-ink: #191919;
+  --card-muted: #5c5c5c;
+  --card-hairline: rgba(0, 0, 0, 0.14);
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --mono: "IBM Plex Mono", "Courier New", monospace;
-  /* Legacy aliases still referenced by markup/JS */
-  --red: var(--terracotta);
-  --blue: var(--petrol);
-  --green: var(--sage);
-  --yellow: var(--ochre);
-  --steel: var(--muted);
+  /* Legacy aliases referenced by markup/JS */
+  --red: var(--mta-red);
+  --blue: var(--mta-blue);
+  --green: var(--mta-green);
+  --steel: var(--dim);
+  --paper: var(--bg);
   --tile: var(--card);
 }
 
@@ -79,17 +52,17 @@ html {
 
 body {
   font-family: var(--sans);
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--bg);
+  color: var(--text);
   line-height: 1.55;
   overflow-x: hidden;
-  padding-bottom: 72px;
+  padding-bottom: 74px;
   font-size: 16.5px;
 }
 
 ::selection {
-  background: var(--peach);
-  color: var(--petrol-deep);
+  background: var(--yellow);
+  color: #111;
 }
 
 a {
@@ -105,12 +78,12 @@ button {
 }
 
 .container {
-  max-width: 1160px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 28px;
 }
 
-/* Film-grain overlay for dark panels */
+/* Film grain for the canvas */
 .grain {
   position: relative;
   isolation: isolate;
@@ -122,13 +95,36 @@ button {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .grain > * {
   position: relative;
   z-index: 2;
+}
+
+/* ---------- Choreographed reveals ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 0.9, 0.3, 1),
+    transform 0.7s cubic-bezier(0.22, 0.9, 0.3, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* ---------- Header ---------- */
@@ -137,11 +133,10 @@ button {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(243, 239, 237, 0.88);
+  background: rgba(13, 13, 13, 0.86);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--hairline);
-  color: var(--ink);
 }
 
 .site-header .container {
@@ -156,13 +151,14 @@ button {
 .wordmark {
   font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--petrol);
+  letter-spacing: -0.02em;
+  color: #fff;
   line-height: 1;
 }
 
 .wordmark .thin {
-  font-weight: 400;
+  font-weight: 300;
+  color: var(--dim-strong);
 }
 
 .wordmark-sub {
@@ -170,14 +166,14 @@ button {
   gap: 10px;
   margin-top: 5px;
   font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--dim);
 }
 
 .wordmark-sub .dot {
-  color: var(--terracotta);
+  color: var(--yellow);
 }
 
 .header-right {
@@ -200,36 +196,36 @@ button {
 
 .service-status .label {
   font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--dim);
 }
 
 .service-status .pill {
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--petrol);
-  border: 1px solid var(--petrol);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
   padding: 4px 12px;
 }
 
 .service-status .pill::before {
   content: "●  ";
-  color: var(--sage);
+  color: #6cbe45;
 }
 
 .btn-sound {
   background: none;
   border: 1px solid var(--hairline);
   border-radius: 999px;
-  color: var(--muted);
+  color: var(--dim);
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 7px 14px;
@@ -238,42 +234,40 @@ button {
 }
 
 .btn-sound:hover {
-  border-color: var(--petrol);
-  color: var(--petrol);
+  border-color: #fff;
+  color: #fff;
 }
 
 .btn-sound[aria-pressed="true"] {
-  background: var(--petrol);
-  border-color: var(--petrol);
-  color: var(--paper);
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: #111;
 }
 
 .btn-contact {
-  background: var(--petrol);
-  color: var(--paper);
-  font-weight: 600;
+  background: var(--yellow);
+  color: #111;
+  font-weight: 700;
   font-size: 0.82rem;
-  letter-spacing: 0.01em;
   text-decoration: none;
   padding: 10px 20px;
-  border-radius: 999px;
-  transition: background 0.2s, transform 0.2s;
+  border-radius: 2px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-contact:hover {
-  background: var(--petrol-deep);
   transform: translateY(-1px);
+  box-shadow: 0 8px 20px -8px rgba(252, 204, 10, 0.5);
 }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero (moodboard cover) ---------- */
 
 .hero {
   position: relative;
   min-height: 88vh;
   display: flex;
   align-items: center;
-  background: var(--petrol);
-  color: var(--paper);
+  background: var(--bg);
   overflow: hidden;
 }
 
@@ -282,14 +276,14 @@ button {
   inset: 0;
   display: flex;
   justify-content: flex-end;
-  padding-right: 12%;
-  gap: 72px;
-  opacity: 0.25;
+  padding-right: 10%;
+  gap: 64px;
+  opacity: 0.5;
   pointer-events: none;
 }
 
 .hero-lines span {
-  width: 2px;
+  width: 6px;
   height: 100%;
 }
 
@@ -297,7 +291,7 @@ button {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1160px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 90px 28px;
   text-align: left;
@@ -306,39 +300,39 @@ button {
 .hero-kicker {
   display: inline-block;
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--peach);
-  margin-bottom: 34px;
+  color: var(--dim);
+  margin-bottom: 30px;
 }
 
 .hero h1 {
-  font-size: clamp(3rem, 9vw, 7.4rem);
-  font-weight: 600;
-  letter-spacing: -0.045em;
+  font-size: clamp(3rem, 9vw, 7.2rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
   line-height: 0.98;
+  color: #fff;
   max-width: 12ch;
-  margin-bottom: 44px;
+  margin-bottom: 20px;
 }
 
 .hero h1 .accent {
-  color: var(--peach);
+  color: var(--yellow);
 }
 
 .hero p {
-  max-width: 46ch;
-  color: rgba(243, 239, 237, 0.78);
-  font-size: clamp(1rem, 2vw, 1.18rem);
-  font-weight: 400;
-  margin-bottom: 54px;
+  max-width: 52ch;
+  color: var(--dim-strong);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  margin: 26px 0 48px;
 }
 
 .hero-index {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 34px;
-  border-top: 1px solid rgba(243, 239, 237, 0.22);
+  border-top: 1px solid var(--hairline);
   padding-top: 26px;
   list-style: none;
 }
@@ -350,18 +344,18 @@ button {
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--paper);
+  color: var(--text);
   transition: color 0.2s;
 }
 
 .hero-index a:hover {
-  color: var(--peach);
+  color: var(--yellow);
 }
 
 .hero-index .num {
   font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--peach);
+  font-size: 0.68rem;
+  color: var(--yellow);
 }
 
 .hero-bullets-row {
@@ -370,51 +364,63 @@ button {
   margin-top: 40px;
 }
 
-/* ---------- Section headings ---------- */
+.hero-bullets-row .bullet {
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.22);
+}
+
+/* ---------- Section headings (yellow index bar) ---------- */
 
 .section-heading {
   display: flex;
-  align-items: baseline;
-  gap: 20px;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 14px;
 }
 
+.section-heading::before {
+  content: "";
+  width: 10px;
+  height: 1.5em;
+  background: var(--yellow);
+  flex: none;
+}
+
 .section-heading h2 {
-  font-size: clamp(1.9rem, 4vw, 2.9rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  color: var(--petrol);
+  font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
 }
 
 .section-heading .sub {
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--dim);
 }
 
-/* ---------- System map ---------- */
+/* ---------- System map (light card on dark canvas) ---------- */
 
 .map-section {
-  background: var(--paper);
+  background: var(--bg);
   padding: 96px 0 72px;
 }
 
 .map-hint {
-  font-size: 0.92rem;
-  color: var(--muted);
+  font-size: 0.9rem;
+  color: var(--dim);
   margin-bottom: 30px;
 }
 
 .map-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  background: var(--card);
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
+  background: #fff;
+  border-radius: 6px;
   padding: 18px 6px;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
 }
 
 #system-map {
@@ -442,15 +448,14 @@ button {
 }
 
 #system-map .station:focus-visible {
-  outline: 2px solid var(--petrol);
+  outline: 2px solid var(--mta-blue);
   outline-offset: 3px;
 }
 
 #system-map .station-label {
   font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  fill: var(--petrol);
+  font-weight: 700;
+  fill: #111;
 }
 
 #system-map .station-sub {
@@ -486,17 +491,17 @@ button {
 }
 
 .legend-item .line-name {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
-  color: var(--petrol);
+  color: #fff;
 }
 
 .legend-item .line-desc {
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--dim);
 }
 
 /* Route bullets */
@@ -509,13 +514,13 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #f3efed;
+  color: #fff;
   font-weight: 700;
   font-size: 1.17rem;
 }
 
 .bullet.dark-text {
-  color: var(--petrol-deep);
+  color: #111;
 }
 
 .bullet.sm {
@@ -529,7 +534,9 @@ button {
 .tunnel {
   position: relative;
   height: 130px;
-  background: var(--petrol-deep);
+  background: #090909;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
   overflow: hidden;
 }
 
@@ -538,7 +545,7 @@ button {
   inset: 0;
   background: repeating-linear-gradient(
     90deg,
-    rgba(243, 239, 237, 0.05) 0 2px,
+    rgba(255, 255, 255, 0.05) 0 2px,
     transparent 2px 150px
   );
 }
@@ -548,7 +555,7 @@ button {
   left: -340px;
   right: -340px;
   height: 2px;
-  background: repeating-linear-gradient(90deg, var(--peach) 0 34px, transparent 34px 340px);
+  background: repeating-linear-gradient(90deg, var(--yellow) 0 34px, transparent 34px 340px);
   filter: blur(0.5px);
   animation: lightsMove 3.2s linear infinite;
 }
@@ -575,8 +582,8 @@ button {
   top: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--mono);
-  color: #97a6ac;
-  font-size: 0.66rem;
+  color: var(--dim);
+  font-size: 0.64rem;
   letter-spacing: 0.34em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -586,7 +593,7 @@ button {
 
 .feed {
   position: relative;
-  background: var(--paper);
+  background: var(--bg);
 }
 
 .trunk-svg {
@@ -608,7 +615,7 @@ button {
 .feed-inner {
   position: relative;
   z-index: 1;
-  max-width: 1160px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 50px 28px 90px;
 }
@@ -632,10 +639,10 @@ button {
     width: 47%;
   }
   .stop.left .stop-card {
-    transform: translateY(26px) rotate(-0.7deg) scale(0.985);
+    transform: translateY(28px) rotate(-0.6deg) scale(0.985);
   }
   .stop.right .stop-card {
-    transform: translateY(26px) rotate(0.7deg) scale(0.985);
+    transform: translateY(28px) rotate(0.6deg) scale(0.985);
   }
 }
 
@@ -643,12 +650,11 @@ button {
   position: relative;
   width: 100%;
   background: var(--card);
-  border: 1px solid var(--hairline);
-  border-radius: 16px;
-  padding: 38px 40px 40px;
-  box-shadow: 0 1px 2px rgba(20, 38, 46, 0.05);
-  opacity: 0.55;
-  transform: translateY(26px);
+  color: var(--card-ink);
+  border-radius: 6px;
+  padding: 36px 38px 38px;
+  opacity: 0.45;
+  transform: translateY(28px);
   transition:
     opacity 0.55s ease,
     transform 0.55s ease,
@@ -658,26 +664,26 @@ button {
 .stop-card.active {
   opacity: 1;
   transform: translateY(0) rotate(0deg) scale(1) !important;
-  box-shadow: 0 30px 60px -24px rgba(20, 38, 46, 0.35);
+  box-shadow: 0 46px 90px -36px rgba(0, 0, 0, 0.95);
 }
 
 .stop-card:hover {
   opacity: 1;
 }
 
-/* Stop ticker (was LED board) */
+/* Stop ticker */
 
 .led-board {
   display: flex;
   align-items: center;
   gap: 10px;
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--hairline);
+  color: var(--card-muted);
+  border-bottom: 1px solid var(--card-hairline);
   padding-bottom: 14px;
   margin-bottom: 24px;
   white-space: nowrap;
@@ -686,10 +692,11 @@ button {
 
 .led-dot {
   flex: none;
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--peach);
+  background: var(--yellow);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   animation: ledBlink 2s step-end infinite;
 }
 
@@ -707,33 +714,33 @@ button {
 
 .stop-card .line-tag .line-label {
   font-family: var(--mono);
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--card-muted);
 }
 
 .stop-card h3 {
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.06;
-  color: var(--petrol);
+  font-size: clamp(1.5rem, 3vw, 2.05rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: #111;
   margin-bottom: 10px;
 }
 
 .stop-card .role {
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--card-muted);
   margin-bottom: 18px;
 }
 
 .stop-card .summary {
-  color: #33454d;
-  font-size: 1.02rem;
+  color: #303030;
+  font-size: 1rem;
   margin-bottom: 22px;
 }
 
@@ -745,36 +752,36 @@ button {
 }
 
 .chip {
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  color: var(--muted);
+  border: 1px solid var(--card-hairline);
+  border-radius: 2px;
+  color: var(--card-muted);
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 5px 11px;
+  padding: 5px 10px;
 }
 
 .impact {
-  border-left: 2px solid var(--peach);
-  padding: 4px 0 4px 18px;
+  border-left: 4px solid var(--yellow);
+  padding: 4px 0 4px 16px;
   margin-bottom: 26px;
 }
 
 .impact .impact-label {
   display: block;
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--card-muted);
   margin-bottom: 6px;
 }
 
 .impact p {
   font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--petrol);
+  font-weight: 700;
+  color: #111;
 }
 
 .stop-toggle {
@@ -783,31 +790,30 @@ button {
   gap: 10px;
   background: none;
   border: none;
-  border-bottom: 1px solid var(--petrol);
+  border-bottom: 2px solid #111;
   font-family: var(--mono);
   font-weight: 500;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--petrol);
+  color: #111;
   padding: 0 0 6px;
   cursor: pointer;
-  transition: gap 0.2s, color 0.2s;
+  transition: gap 0.2s;
 }
 
 .stop-toggle:hover {
   gap: 16px;
-  color: var(--petrol-deep);
 }
 
-/* ---------- Case study behind matte petrol doors ---------- */
+/* ---------- Case study behind charcoal doors ---------- */
 
 .case-wrap {
   display: none;
   position: relative;
   overflow: hidden;
   margin-top: 28px;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 
 .stop-card.open .case-wrap {
@@ -819,26 +825,32 @@ button {
   padding-top: 24px;
 }
 
-/* Embossed station plate (was mosaic) */
+/* Black station signage plate (Grand Central style) */
 
 .mosaic {
   position: relative;
-  background: linear-gradient(150deg, var(--petrol-soft) 0%, var(--petrol) 55%, #1a3540 100%);
-  border: 1px solid rgba(243, 239, 237, 0.12);
-  border-radius: 10px;
-  padding: 26px 24px;
-  text-align: center;
+  background: #0f0f0f;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  padding: 24px 24px;
+  text-align: left;
+}
+
+.mosaic::after {
+  content: "";
+  position: absolute;
+  left: 24px;
+  bottom: 16px;
+  width: 44px;
+  height: 4px;
+  background: var(--yellow);
 }
 
 .mosaic-text {
-  color: #c8d2d5;
+  color: #fff;
   font-weight: 700;
-  font-size: clamp(1.05rem, 2.6vw, 1.5rem);
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  text-shadow:
-    0 -1px 1px rgba(0, 0, 0, 0.55),
-    0 1px 1px rgba(255, 255, 255, 0.12);
+  font-size: clamp(1.2rem, 2.8vw, 1.7rem);
+  letter-spacing: -0.01em;
 }
 
 .doors {
@@ -852,7 +864,7 @@ button {
 .door {
   width: 50%;
   height: 100%;
-  background: linear-gradient(155deg, #24454f 0%, #1d3a45 55%, #17313b 100%);
+  background: linear-gradient(155deg, #2c2c2c 0%, #202020 55%, #191919 100%);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -862,22 +874,22 @@ button {
 }
 
 .door.left {
-  border-right: 1px solid rgba(243, 239, 237, 0.25);
-  border-radius: 12px 0 0 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 6px 0 0 6px;
 }
 
 .door.right {
-  border-left: 1px solid rgba(243, 239, 237, 0.25);
-  border-radius: 0 12px 12px 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0 6px 6px 0;
 }
 
 .door-window {
   display: block;
   width: 30%;
   height: 38%;
-  background: linear-gradient(160deg, #0e1d23 0%, #1a343f 60%, #0e1d23 100%);
-  border: 1px solid rgba(243, 239, 237, 0.22);
-  border-radius: 6px;
+  background: linear-gradient(160deg, #0a0a0a 0%, #161616 60%, #0a0a0a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
 }
 
 .door-sticker {
@@ -886,10 +898,10 @@ button {
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(243, 239, 237, 0.55);
+  color: rgba(255, 255, 255, 0.6);
   white-space: nowrap;
 }
 
@@ -904,32 +916,32 @@ button {
 .case-study h4 {
   display: inline-block;
   font-size: 1rem;
-  font-weight: 600;
-  color: var(--petrol);
-  border-bottom: 1px solid var(--petrol);
+  font-weight: 700;
+  color: #111;
+  border-bottom: 2px solid #111;
   padding-bottom: 4px;
   margin-bottom: 12px;
 }
 
 .case-study p {
-  color: #33454d;
+  color: #303030;
   margin-bottom: 22px;
-  font-size: 0.97rem;
+  font-size: 0.96rem;
 }
 
 .case-study .source-link {
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--card-muted);
 }
 
 .case-study .source-link:hover {
-  color: var(--petrol);
+  color: #111;
 }
 
-/* Mobile connector rail */
+/* Mobile rail */
 
 @media (max-width: 899px) {
   .feed-inner {
@@ -957,16 +969,21 @@ button {
 /* ---------- Info sections ---------- */
 
 .info-section {
-  background: var(--paper);
+  background: var(--bg);
   padding: 96px 0;
   border-top: 1px solid var(--hairline);
 }
 
 #about .info-grid {
   background: var(--card);
-  border: 1px solid var(--hairline);
-  border-radius: 16px;
+  color: var(--card-ink);
+  border-radius: 6px;
   padding: 44px;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+}
+
+#about .info-grid h3 {
+  color: #111 !important;
 }
 
 .info-grid {
@@ -982,17 +999,29 @@ button {
 
 .info-section .lede {
   font-size: clamp(1.5rem, 3.2vw, 2.2rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  color: var(--petrol);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #111;
   margin: 4px 0 26px;
 }
 
 .info-section p.body-text {
-  color: #33454d;
+  color: #303030;
   margin-bottom: 16px;
   max-width: 60ch;
+}
+
+#about .service-lines .line-name {
+  color: #111;
+}
+
+#about .service-lines .line-desc {
+  color: var(--card-muted);
+}
+
+#about .text-link {
+  color: #111;
 }
 
 .line-swatches {
@@ -1002,29 +1031,19 @@ button {
 }
 
 .line-swatches span {
-  height: 4px;
+  height: 6px;
   width: 44px;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
-/* Digital Leadership — petrol chapter */
+/* Digital Leadership — dark chapter with yellow rules */
 
 .info-section.alt {
-  background: var(--petrol);
-  color: var(--paper);
-  border-top: none;
-}
-
-.info-section.alt .section-heading h2 {
-  color: var(--paper);
-}
-
-.info-section.alt .section-heading .sub {
-  color: rgba(243, 239, 237, 0.6);
+  background: var(--bg);
 }
 
 .info-section.alt .body-text {
-  color: rgba(243, 239, 237, 0.78) !important;
+  color: var(--dim-strong) !important;
 }
 
 .process-list {
@@ -1040,46 +1059,42 @@ button {
 }
 
 .process-item {
-  border-top: 2px solid var(--peach);
+  border-top: 3px solid var(--yellow);
   padding-top: 18px;
 }
 
 .process-item h4 {
   font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--paper);
+  font-weight: 700;
+  color: #fff;
   margin-bottom: 10px;
 }
 
 .process-item p {
-  font-size: 0.93rem;
-  color: #bfc9cb;
-}
-
-.info-section.alt .text-link {
-  color: var(--peach);
+  font-size: 0.92rem;
+  color: var(--dim-strong);
 }
 
 .text-link {
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--petrol);
+  color: var(--yellow);
 }
 
-/* ---------- Poster wall (in-car advertising, reimagined) ---------- */
+/* ---------- Poster wall ---------- */
 
 .car-section {
-  background: var(--paper);
+  background: var(--bg);
   padding: 96px 0;
+  border-top: 1px solid var(--hairline);
 }
 
 .poster-wall {
   display: grid;
   gap: 22px;
-  max-width: 1160px;
+  max-width: 1180px;
   margin: 44px auto 0;
   padding: 0 28px;
 }
@@ -1095,20 +1110,20 @@ button {
   flex-direction: column;
   justify-content: space-between;
   min-height: 380px;
-  border-radius: 14px;
+  border-radius: 6px;
   padding: 30px 28px;
   text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 0.9, 0.3, 1), box-shadow 0.3s;
 }
 
 .poster:hover {
-  transform: translateY(-8px) rotate(-0.5deg);
-  box-shadow: 0 30px 60px -26px rgba(20, 38, 46, 0.45);
+  transform: translateY(-10px) rotate(-0.5deg);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
 }
 
 .poster .poster-tag {
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0.75;
@@ -1116,8 +1131,8 @@ button {
 
 .poster .poster-head {
   font-size: clamp(1.5rem, 2.6vw, 2rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.08;
   margin: 18px 0;
 }
@@ -1129,48 +1144,53 @@ button {
 }
 
 .poster.p-petrol {
-  background: var(--petrol);
-  color: var(--paper);
+  background: var(--sign);
+  border: 1px solid var(--hairline);
+  color: #fff;
 }
 
 .poster.p-petrol .poster-head {
-  color: var(--peach);
+  color: var(--yellow);
 }
 
 .poster.p-peach {
-  background: var(--peach);
-  color: var(--petrol-deep);
+  background: var(--yellow);
+  color: #111;
 }
 
 .poster.p-slate {
-  background: var(--slate);
-  color: var(--paper);
+  background: var(--mta-blue);
+  color: #fff;
 }
 
-/* ---------- Exit signage ---------- */
+/* ---------- Exit signage (white-on-black with red block) ---------- */
 
 .exit-sign {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: var(--paper);
-  color: var(--petrol);
-  padding: 26px 28px;
+  gap: 18px;
+  background: #000;
+  color: #fff;
+  padding: 18px 28px;
   text-decoration: none;
   border-top: 1px solid var(--hairline);
-  max-width: 1160px;
-  margin: 0 auto;
+  border-bottom: 1px solid var(--hairline);
 }
 
-.exit-word,
+.exit-word {
+  background: var(--mta-red);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  padding: 8px 18px;
+  border-radius: 2px;
+}
+
 .exit-arrow {
   font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.exit-arrow {
+  font-weight: 700;
   transition: transform 0.2s;
 }
 
@@ -1181,18 +1201,17 @@ button {
 .exit-detail {
   margin-left: auto;
   font-family: var(--mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--dim);
   text-align: right;
 }
 
 /* ---------- Footer ---------- */
 
 .site-footer {
-  background: var(--petrol-deep);
-  color: var(--paper);
+  background: var(--sign);
   padding: 90px 0 46px;
 }
 
@@ -1209,13 +1228,14 @@ button {
 
 .site-footer h3 {
   font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   margin-bottom: 20px;
+  color: #fff;
 }
 
 .site-footer .muted {
-  color: #9fb0b5;
+  color: var(--dim);
   font-size: 0.95rem;
   margin-bottom: 18px;
 }
@@ -1239,33 +1259,48 @@ button {
 }
 
 .service-lines .line-name {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.94rem;
+  color: #fff;
 }
 
 .service-lines .line-desc {
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #8fa2a8;
+  color: var(--dim);
 }
 
+/* The MetroCard — gold, black, and MetroCard blue */
+
 .metrocard {
-  background: var(--paper);
-  color: var(--petrol-deep);
+  background: var(--yellow);
+  color: #111;
   display: inline-block;
   padding: 26px 30px;
-  border-radius: 12px;
+  border-radius: 8px;
   text-decoration: none;
   cursor: grab;
   user-select: none;
   touch-action: pan-y;
   transition: transform 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.metrocard::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: #111;
 }
 
 .metrocard:hover {
-  transform: rotate(-1deg);
+  transform: rotate(-1.5deg);
 }
 
 .metrocard:active {
@@ -1276,32 +1311,35 @@ button {
   font-size: 1.12rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--petrol);
+  color: #003083;
+  padding-right: 18px;
 }
 
 .metrocard .divider {
-  height: 1px;
-  background: rgba(31, 60, 71, 0.2);
+  height: 2px;
+  background: rgba(0, 0, 0, 0.25);
   margin: 14px 0;
+  margin-right: 18px;
 }
 
 .metrocard .swipe {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  padding-right: 18px;
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #3d3d3d;
 }
 
 .metrocard .swipe .status-ok {
-  color: #2e6b46;
+  color: #00551f;
 }
 
 .metrocard .swipe .status-err {
-  color: #a8402f;
+  color: #8c1408;
 }
 
 .footer-links {
@@ -1313,25 +1351,25 @@ button {
 }
 
 .footer-links a {
-  color: #9fb0b5;
+  color: var(--dim);
   transition: color 0.2s;
 }
 
 .footer-links a:hover {
-  color: var(--paper);
+  color: #fff;
 }
 
 .colophon {
   margin-top: 70px;
   text-align: center;
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #7c8f95;
+  color: #8a8a8a;
 }
 
-/* ---------- In-car strip map ---------- */
+/* ---------- Strip map (light track on dark bar) ---------- */
 
 .strip-map {
   position: fixed;
@@ -1339,11 +1377,11 @@ button {
   right: 0;
   bottom: 0;
   z-index: 90;
-  background: rgba(252, 250, 248, 0.92);
+  background: rgba(13, 13, 13, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--hairline);
-  padding: 12px 18px;
+  padding: 11px 18px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -1352,10 +1390,10 @@ button {
 .strip-now {
   flex: none;
   font-family: var(--mono);
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--petrol);
+  color: var(--text);
   max-width: 32vw;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1367,13 +1405,16 @@ button {
   display: flex;
   align-items: center;
   min-width: 0;
+  background: #f2f2f2;
+  border-radius: 999px;
+  padding: 8px 12px;
 }
 
 .strip-seg {
   flex: 1;
-  height: 3px;
+  height: 4px;
   min-width: 6px;
-  border-radius: 2px;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.2);
 }
 
 .strip-dot {
@@ -1381,8 +1422,9 @@ button {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background: var(--card);
-  border: 4px solid var(--dot-color, var(--petrol));
+  background: #fff;
+  border: 4px solid var(--dot-color, #111);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
   padding: 0;
   cursor: pointer;
   transition: transform 0.2s;
@@ -1394,7 +1436,7 @@ button {
 
 .strip-dot:focus-visible,
 .strip-end:focus-visible {
-  outline: 2px solid var(--petrol);
+  outline: 2px solid var(--mta-blue);
   outline-offset: 2px;
 }
 
@@ -1408,30 +1450,31 @@ button {
 }
 
 @keyframes currentPulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(255, 163, 111, 0.55); }
-  50% { box-shadow: 0 0 0 8px rgba(255, 163, 111, 0.12); }
+  0%, 100% { box-shadow: 0 0 0 3px rgba(252, 204, 10, 0.75); }
+  50% { box-shadow: 0 0 0 8px rgba(252, 204, 10, 0.15); }
 }
 
 .strip-end {
   flex: none;
   width: 13px;
   height: 13px;
-  background: var(--card);
-  border: 4px solid var(--petrol-deep);
+  background: #fff;
+  border: 4px solid #111;
   border-radius: 50%;
   padding: 0;
   cursor: pointer;
 }
 
-/* ---------- Weekend planned-work pill ---------- */
+/* ---------- Weekend planned-work pill (black on MTA orange) ---------- */
 
 .pill-work {
-  border-color: var(--ochre) !important;
-  color: #7c611b !important;
+  background: #ff6319 !important;
+  border-color: #ff6319 !important;
+  color: #111 !important;
 }
 
 .pill-work::before {
-  color: var(--ochre) !important;
+  color: #111 !important;
 }
 
 /* ---------- Reduced motion ---------- */
@@ -1456,9 +1499,4 @@ button {
   .strip-now {
     display: none;
   }
-}
-
-/* Bullets sitting on petrol need a faint ring to stay visible */
-.hero-bullets-row .bullet {
-  box-shadow: 0 0 0 1.5px rgba(243, 239, 237, 0.35);
 }

@@ -98,7 +98,7 @@
     svg.appendChild(
       svgEl("path", {
         d: "M " + MAP.process.x + " " + MAP.process.y + " L " + MAP.contact.x + " " + MAP.contact.y,
-        stroke: "#1f3c47",
+        stroke: "#111111",
         "stroke-width": 10,
         fill: "none",
         "stroke-linecap": "round",
@@ -158,7 +158,7 @@
           dy: "0.36em",
           "font-size": "19",
           "font-weight": "700",
-          fill: line.darkText ? "#14262e" : "#f3efed",
+          fill: line.darkText ? "#111111" : "#ffffff",
           text: line.bullet,
         })
       );
@@ -189,7 +189,7 @@
           cx: st.x,
           cy: r.y,
           r: dotR,
-          fill: "#fcfaf8",
+          fill: "#ffffff",
           stroke: line.color,
           "stroke-width": 5,
         })
@@ -225,7 +225,7 @@
     specials.forEach((s) => {
       const g = svgEl("g", { class: "station", tabindex: "0", role: "link" });
       g.appendChild(
-        svgEl("circle", { cx: s.x, cy: s.y, r: 13, fill: "#fcfaf8", stroke: "#1f3c47", "stroke-width": 5 })
+        svgEl("circle", { cx: s.x, cy: s.y, r: 13, fill: "#ffffff", stroke: "#111111", "stroke-width": 5 })
       );
       g.appendChild(
         svgEl("text", {
@@ -455,7 +455,7 @@
           cx: stationX,
           cy: y,
           r: 9,
-          fill: "#fcfaf8",
+          fill: "#ffffff",
           stroke: line.color,
           "stroke-width": 6,
           opacity: 0.35,
@@ -760,6 +760,66 @@
     );
   }
 
+  /* ---------- Choreographed reveals (coordinated cascade) ---------- */
+
+  function initReveals() {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Hero cascade on load: kicker -> headline -> copy -> index -> bullets.
+    const heroSeq = [".hero-kicker", ".hero h1", ".hero p", ".hero-index", ".hero-bullets-row"];
+    heroSeq.forEach((sel, i) => {
+      const n = document.querySelector(sel);
+      if (!n) return;
+      n.classList.add("reveal");
+      n.style.transitionDelay = i * 130 + "ms";
+    });
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() =>
+        heroSeq.forEach((sel) => {
+          const n = document.querySelector(sel);
+          if (n) n.classList.add("revealed");
+        })
+      )
+    );
+
+    // Scroll-triggered reveals; siblings in a group stagger like a deck build.
+    const groups = [
+      ".section-heading",
+      ".map-hint",
+      ".map-scroll",
+      ".legend-item",
+      ".poster",
+      ".process-item",
+      "#about .info-grid",
+      ".exit-sign",
+      ".footer-grid > div",
+    ];
+    const staggered = [".legend-item", ".poster", ".process-item", ".footer-grid > div"];
+    staggered.forEach((sel) =>
+      document.querySelectorAll(sel).forEach((n, i) => {
+        n.dataset.revealDelay = i * 110;
+      })
+    );
+    const targets = document.querySelectorAll(groups.join(", "));
+    targets.forEach((n) => n.classList.add("reveal"));
+    if (reduced) {
+      targets.forEach((n) => n.classList.add("revealed"));
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          obs.unobserve(entry.target);
+          entry.target.style.transitionDelay = (entry.target.dataset.revealDelay || 0) + "ms";
+          entry.target.classList.add("revealed");
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
+    );
+    targets.forEach((n) => obs.observe(n));
+  }
+
   /* ---------- Deep links: #stop-<id> opens that station's doors ---------- */
 
   function initDeepLinks() {
@@ -793,6 +853,7 @@
     initMetroCard();
     initServiceStatus();
     initParallax();
+    initReveals();
     initDeepLinks();
     watchStops();
     drawTrunk();
