@@ -30,6 +30,7 @@ const LINES = {
     bullet: "S",
     color: "#FCCC0A",
     darkText: true,
+    casing: "#0b0b0b",
     description: "Startups founded: RepRevive, AdSpark, Bitflip",
   },
 };

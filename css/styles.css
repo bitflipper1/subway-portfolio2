@@ -91,7 +91,7 @@ img {
   display: flex;
   gap: 10px;
   margin-top: 4px;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #9a9a9a;
@@ -122,7 +122,7 @@ img {
 }
 
 .service-status .label {
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #8b8b8b;
@@ -131,7 +131,7 @@ img {
 .service-status .pill {
   background: #147a3a;
   color: #fff;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   padding: 3px 10px;
@@ -216,7 +216,7 @@ img {
 }
 
 .hero h1 .gradient {
-  background: linear-gradient(90deg, var(--red), var(--blue), var(--green), var(--yellow));
+  background: linear-gradient(90deg, var(--red), var(--blue), var(--green), #ae8c02);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -266,7 +266,7 @@ img {
 }
 
 .section-heading .sub {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.24em;
   color: var(--steel);
@@ -308,8 +308,9 @@ img {
   r: 11;
 }
 
-#system-map .station:focus {
-  outline: none;
+#system-map .station:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
 }
 
 #system-map .station-label {
@@ -319,9 +320,9 @@ img {
 }
 
 #system-map .station-sub {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
-  fill: #777;
+  fill: #767676;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -355,7 +356,7 @@ img {
 }
 
 .legend-item .line-desc {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--steel);
@@ -373,7 +374,7 @@ img {
   justify-content: center;
   color: #fff;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.17rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
@@ -382,9 +383,9 @@ img {
 }
 
 .bullet.sm {
-  width: 26px;
-  height: 26px;
-  font-size: 0.85rem;
+  width: 30px;
+  height: 30px;
+  font-size: 1.17rem;
 }
 
 /* ---------- Projects feed ---------- */
@@ -476,11 +477,11 @@ img {
 }
 
 .stop-card .line-tag .line-label {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #9a9a9a;
+  color: #767676;
 }
 
 .stop-card h3 {
@@ -492,7 +493,7 @@ img {
 }
 
 .stop-card .role {
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -517,7 +518,7 @@ img {
   background: #f1f1f1;
   border: 1px solid #e0e0e0;
   color: #666;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -533,11 +534,11 @@ img {
 
 .impact .impact-label {
   display: block;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.22em;
-  color: #999;
+  color: #737373;
   margin-bottom: 4px;
 }
 
@@ -595,7 +596,7 @@ img {
 }
 
 .case-study .source-link {
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -795,7 +796,7 @@ img {
 }
 
 .service-lines .line-desc {
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #8a8a8a;
@@ -831,11 +832,11 @@ img {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #8a8a8a;
+  color: #767676;
 }
 
 .footer-links {
@@ -853,11 +854,11 @@ img {
 .colophon {
   margin-top: 64px;
   text-align: center;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.24em;
-  color: #5c5c5c;
+  color: #7c7c7c;
 }
 
 /* Reduced motion */

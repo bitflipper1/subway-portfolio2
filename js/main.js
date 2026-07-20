@@ -105,8 +105,22 @@
       })
     );
 
-    // Colored routes
+    // Colored routes. Lines whose color can't reach 3:1 against the white map
+    // (the yellow shuttle) get a dark casing stroke underneath — the classic
+    // transit-map treatment — so the route stays visible to low-vision riders.
     Object.values(LINES).forEach((line) => {
+      if (line.casing) {
+        svg.appendChild(
+          svgEl("path", {
+            d: routePath(line),
+            stroke: line.casing,
+            "stroke-width": 14,
+            fill: "none",
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+          })
+        );
+      }
       svg.appendChild(
         svgEl("path", {
           d: routePath(line),
@@ -127,7 +141,14 @@
       const bulletY = r.y > MAP.about.y ? r.y + 30 : r.y - 26;
       const g = svgEl("g", {});
       g.appendChild(
-        svgEl("circle", { cx: r.dep - 34, cy: bulletY, r: 15, fill: line.color })
+        svgEl("circle", {
+          cx: r.dep - 34,
+          cy: bulletY,
+          r: 17,
+          fill: line.color,
+          stroke: line.casing || "none",
+          "stroke-width": line.casing ? 2 : 0,
+        })
       );
       g.appendChild(
         svgEl("text", {
@@ -135,7 +156,7 @@
           y: bulletY,
           "text-anchor": "middle",
           dy: "0.36em",
-          "font-size": "15",
+          "font-size": "19",
           "font-weight": "700",
           fill: line.darkText ? "#111" : "#fff",
           text: line.bullet,
@@ -150,11 +171,24 @@
       const r = MAP.routes[st.route];
       const isProject = PROJECTS.some((p) => p.id === id);
       const g = svgEl("g", { class: "station", tabindex: "0", role: "link" });
+      const dotR = isProject ? 9 : 7;
+      if (line.casing) {
+        g.appendChild(
+          svgEl("circle", {
+            cx: st.x,
+            cy: r.y,
+            r: dotR + 4,
+            fill: "none",
+            stroke: line.casing,
+            "stroke-width": 2,
+          })
+        );
+      }
       g.appendChild(
         svgEl("circle", {
           cx: st.x,
           cy: r.y,
-          r: isProject ? 9 : 7,
+          r: dotR,
           fill: "#fff",
           stroke: line.color,
           "stroke-width": 5,
@@ -183,7 +217,7 @@
 
     // Interchanges + terminal
     const specials = [
-      { x: MAP.about.x, y: MAP.about.y, name: "About Me", sub: "All lines board here", target: "#about", labelX: MAP.about.x, nameY: MAP.about.y + 46, anchor: "middle" },
+      { x: MAP.about.x, y: MAP.about.y, name: "About Me", sub: "Interchange", target: "#about", labelX: MAP.about.x - 14, nameY: MAP.about.y + 48, anchor: "middle" },
       // Label sits up-and-right of the interchange, clear of the arriving diagonals.
       { x: MAP.process.x, y: MAP.process.y, name: "Digital Leadership", sub: "All lines run via process", target: "#process", labelX: MAP.process.x + 18, nameY: MAP.process.y - 48, anchor: "start" },
       { x: MAP.contact.x, y: MAP.contact.y, name: "Contact", sub: "Terminal", target: "#contact", labelX: MAP.contact.x, nameY: MAP.contact.y + 46, anchor: "middle" },
